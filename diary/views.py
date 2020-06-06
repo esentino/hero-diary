@@ -7,7 +7,7 @@ from diary.models import Hero
 
 class StartView(View):
     def get(self, request):
-        heroes = Hero.objects.All()
+        heroes = Hero.objects.all()
         return render('index.html', context={'heroes': heroes})
 
 
