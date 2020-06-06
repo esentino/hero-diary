@@ -8,7 +8,7 @@ from diary.models import Hero
 class StartView(View):
     def get(self, request):
         heroes = Hero.objects.all()
-        return render('index.html', context={'heroes': heroes})
+        return render(request, 'index.html', context={'heroes': heroes})
 
 
 class CreateHero(View):
