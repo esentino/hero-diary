@@ -1,3 +1,4 @@
+from datetime import datetime
 from random import randint
 
 from django.shortcuts import render, redirect
@@ -24,5 +25,6 @@ class CreateHero(View):
             wisdom=randint(3, 18),
             charisma=randint(3, 18),
             gold=0,
+            last_action=datetime.now()
         )
         return redirect('index')
