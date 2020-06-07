@@ -117,7 +117,7 @@ class Diary:
             item = self._hero.items.first()
             self._hero.gold += item.price
             self._hero.last_action += timedelta(seconds=action.time)
-            self.messages.append(f'{self._hero.last_action} - sell item {item}')
+            self.messages.append(f'{self._hero.last_action} - sell item {item} - price: {item.price}')
             item.delete()
             self._hero.save()
             return
