@@ -1,24 +1,16 @@
-from random import randint, choice
+import math
+from random import choice
 
 from django.db import models
-import math
-
-from django.db.models import F
-
-LOCATION_ROAD_TOWN = 4
-
-LOCATION_KILLING_FIELDS = 3
-
-LOCATION_ROAD_KILLING_FIELDS = 2
-
-LOCATION_TOWN = 1
-LUCK_MULTIPLIER = 0.1
-
-BASE_SPEED_OF_TRAVEL = 1
-
-SPEED_OF_TRAVEL_MULTIPLIER = 0.1
 
 BASE_CAPACITY = 10
+BASE_SPEED_OF_TRAVEL = 1
+LOCATION_ROAD_TOWN = 4
+LOCATION_KILLING_FIELDS = 3
+LOCATION_ROAD_KILLING_FIELDS = 2
+LOCATION_TOWN = 1
+LUCK_MULTIPLIER = 0.1
+SPEED_OF_TRAVEL_MULTIPLIER = 0.1
 
 LIST_OF_ITEMS = [
     'Soap',
@@ -30,7 +22,6 @@ LIST_OF_ITEMS = [
     'Head & Shoulders',
     'Bat',
 ]
-
 
 LIST_OF_MONSTER = [
     'Dragon',
