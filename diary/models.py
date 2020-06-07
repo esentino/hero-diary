@@ -155,11 +155,11 @@ class Equipment(models.Model):
 
     @property
     def price(self):
-        return self.prefix * self.suffix * self.slots
+        return self.prefix * self.suffix * self.slot
 
     @property
     def price_next(self):
-        return self.prefix * self.suffix * self.slots * 4
+        return self.prefix * self.suffix * self.slot * 4
 
     def __str__(self):
         return f'{self.get_prefix_display()} {self.get_slot_display()} {self.get_prefix_display()} {self.modifier}'
