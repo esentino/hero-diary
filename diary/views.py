@@ -79,6 +79,7 @@ class Diary:
 
     def predict_action(self):
         if self._hero.location == LOCATION_TOWN:
+            self._hero.refresh_from_db()
             if self._hero.items.count() > 0:
                 return Action(ActionType.SELL_ITEM)
             if self.can_buy_equipment():
