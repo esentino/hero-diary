@@ -148,8 +148,6 @@ class Diary:
                 self.messages.append(f'{self._hero.last_action} - get attribute {attribute}')
             item = self.generate_item()
             self.messages.append(f'{self._hero.last_action} - get {item}')
-            item.owner = self._hero
-            item.save()
             self._hero.save()
             return
         if action.action_type == ActionType.TRAVEL_TO_TOWN:
@@ -190,7 +188,7 @@ class Diary:
         else:
             quality = 1
         name = choice(LIST_OF_ITEMS)
-        return Item.objects.create(quality=quality, name=name)
+        return Item.objects.create(quality=quality, name=name, owner=self._hero)
 
 
 class CheckHero(View):
