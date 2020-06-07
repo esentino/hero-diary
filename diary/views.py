@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum, auto
 from random import randint, choice
 
@@ -75,7 +75,7 @@ class Diary:
 
     def can_do_next_action(self):
         action = self.predict_action()
-        return timedelta(seconds=action.time) < datetime.now() - self._hero.last_action
+        return timedelta(seconds=action.time) < datetime.now(timezone.utc) - self._hero.last_action
 
     def predict_action(self):
         if self._hero.location == LOCATION_TOWN:
