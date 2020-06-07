@@ -21,7 +21,7 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="card col-4">
+        <div class="card col-12">
             <h5 class="card-header">{{hero.name}}</h5>
             <div class="card-body">
                 <h5 class="card-title">last seen: {{ hero.last_action }}</h5>
@@ -34,6 +34,7 @@
                     Location: {{ hero.get_location_display }}
                     Exp: {{ hero.experience }}
                     Level: {{ hero.level }}
+                    Gold: {{ hero.gold }}
                 </p><p>
                     Equipment:</p>
 
