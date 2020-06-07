@@ -32,13 +32,13 @@
                     Wis: {{ hero.wisdom }}
                     Cha: {{ hero.charisma }}
                     Location: {{ hero.get_location_display }}
-                </p>
-                <p>
-                    Equipment:
+                </p><p>
+                    Equipment:</p>
+
                     {% for equipment in hero.equipments.all %}
-                      {{ equipment }} |
+                      <p>{{ equipment }}</p>
                     {% endfor%}
-                </p>
+
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>

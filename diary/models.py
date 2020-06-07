@@ -162,4 +162,4 @@ class Equipment(models.Model):
         return self.prefix * self.suffix * self.slot * 4
 
     def __str__(self):
-        return f'{self.get_prefix_display()} {self.get_slot_display()} {self.get_prefix_display()} {self.modifier}'
+        return f'{self.get_prefix_display()} {self.get_slot_display()} {self.get_suffix_display()} {self.modifier}'
