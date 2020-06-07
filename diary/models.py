@@ -87,15 +87,15 @@ class Hero(models.Model):
     def add_random_attribute(self):
         option = choice(['strength', 'agility', 'vitality', 'wisdom', 'charisma'])
         if option == 'strength':
-            self.strength = F('strength') + 1
+            self.strength += + 1
         if option == 'agility':
-            self.agility = F('agility') + 1
+            self.agility += + 1
         if option == 'vitality':
-            self.vitality = F('vitality') + 1
+            self.vitality += + 1
         if option == 'wisdom':
-            self.wisdom = F('wisdom') + 1
+            self.wisdom += + 1
         if option == 'charisma':
-            self.charisma = F('charisma') + 1
+            self.charisma += + 1
         self.save()
         self.refresh_from_db()
         return option

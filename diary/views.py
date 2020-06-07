@@ -113,7 +113,7 @@ class Diary:
     def make_action(self, action: Action):
         if action.action_type == ActionType.SELL_ITEM:
             item = self._hero.items.first()
-            self._hero.gold = F('gold') + item.price
+            self._hero.gold += item.price
             self._hero.last_action += timedelta(seconds=action.time)
             self.messages.append(f'{self._hero.last_action} - sell item {item}')
             item.delete()
@@ -140,7 +140,7 @@ class Diary:
             self._hero.save()
             return
         if action.action_type == ActionType.KILL_MONSTER:
-            self._hero.experience = F('experience') + randint(3,5)
+            self._hero.experience += + randint(3,5)
             self._hero.last_action += timedelta(seconds=action.time)
             monster = choice(LIST_OF_MONSTER)
             self.messages.append(f'{self._hero.last_action} - kill {monster}')
@@ -165,13 +165,13 @@ class Diary:
             return
 
     def buy_equipment(self, slot, value):
-        self._hero.gold = F('gold') - value
+        self._hero.gold -= - value
         equipment = self._hero.equipments.filter(slot=slot).first()
         if equipment:
             if equipment.prefix > equipment.suffix:
-                equipment.suffix = F('suffix') * 4
+                equipment.suffix *= 4
             else:
-                equipment.prefix = F('prefix') * 4
+                equipment.prefix *= 4
             equipment.save()
         else:
             equipment = Equipment.objects.create(prefix=1, suffix=1, slot=slot, owner=self._hero, modifier=0)
