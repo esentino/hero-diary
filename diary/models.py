@@ -79,7 +79,9 @@ class Hero(models.Model):
 
     @property
     def level(self):
-        return math.ceil(math.log(max(self.experience, 1), 8))
+        current_exp = max(self.experience, 1)
+        logaritmic_level = math.log(current_exp, 8)
+        return math.ceil(logaritmic_level)
 
     def add_random_attribute(self):
         option = choice(['strength', 'agility', 'vitality', 'wisdom', 'charisma'])
