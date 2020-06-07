@@ -66,6 +66,10 @@ class Action:
 class Diary:
     MAX_ACTION_COUNT=15
 
+    def __init__(self, hero: Hero):
+        self._hero = hero
+        self.messages = []
+
     def process_story(self):
         counter = 0
         while self.can_do_next_action() and counter<self.MAX_ACTION_COUNT:
