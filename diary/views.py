@@ -2,15 +2,15 @@ from datetime import datetime, timedelta, timezone
 from enum import Enum, auto
 from random import randint, choice
 
-from django.db.models import F
 from django.shortcuts import render, redirect, get_object_or_404
-
 from django.views import View
+from faker import Faker
 
 from diary.models import Hero, LOCATION_TOWN, LOCATION_ROAD_KILLING_FIELDS, LOCATION_KILLING_FIELDS, LOCATION_ROAD_TOWN, \
     Equipment, LIST_OF_MONSTER, Item, LIST_OF_ITEMS
-from faker import Faker
+
 fake = Faker(['pl_PL', 'sv_SE', 'hi_IN'])
+
 
 class StartView(View):
     def get(self, request):
@@ -35,7 +35,7 @@ class CreateHero(View):
 
 class ActionType(Enum):
     SELL_ITEM = auto()
-    BUY_EQUIPMENT= auto()
+    BUY_EQUIPMENT = auto()
     TRAVEL_TO_KILLING_FIELD = auto()
     KILLING_FIELD = auto()
     KILL_MONSTER = auto()
@@ -64,7 +64,7 @@ class Action:
 
 
 class Diary:
-    MAX_ACTION_COUNT=15
+    MAX_ACTION_COUNT = 15
 
     def __init__(self, hero: Hero):
         self._hero = hero
@@ -72,7 +72,7 @@ class Diary:
 
     def process_story(self):
         counter = 0
-        while self.can_do_next_action() and counter<self.MAX_ACTION_COUNT:
+        while self.can_do_next_action() and counter < self.MAX_ACTION_COUNT:
             action = self.predict_action()
             self.make_action(action)
             counter += 1
@@ -117,7 +117,8 @@ class Diary:
             item = self._hero.items.first()
             self._hero.gold += item.price
             self._hero.last_action += timedelta(seconds=action.time)
-            self.messages.append(f'{self._hero.last_action} - sell item {item} - price: {item.price} - gold {self._hero.gold}')
+            self.messages.append(
+                f'{self._hero.last_action} - sell item {item} - price: {item.price} - gold {self._hero.gold}')
             item.delete()
             self._hero.save()
             return
@@ -142,7 +143,7 @@ class Diary:
             self._hero.save()
             return
         if action.action_type == ActionType.KILL_MONSTER:
-            self._hero.experience += + randint(3,5)
+            self._hero.experience += + randint(3, 5)
             self._hero.last_action += timedelta(seconds=action.time)
             monster = choice(LIST_OF_MONSTER)
             self.messages.append(f'{self._hero.last_action} - kill {monster}')
@@ -181,7 +182,7 @@ class Diary:
         return equipment
 
     def generate_item(self):
-        roll = randint(1,64)
+        roll = randint(1, 64)
         if roll == 64:
             quality = 64
         elif roll >= 64 - 4:
