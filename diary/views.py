@@ -143,7 +143,7 @@ class Diary:
             self._hero.last_action += timedelta(seconds=action.time)
             monster = choice(LIST_OF_MONSTER)
             self.messages.append(f'{self._hero.last_action} - kill {monster}')
-            if randint(100) > 99:
+            if randint(1, 100) > 99:
                 attribute = self._hero.add_random_attribute()
                 self.messages.append(f'{self._hero.last_action} - get attribute {attribute}')
             item = self.generate_item()
