@@ -1,5 +1,17 @@
+from random import randint, choice
+
 from django.db import models
 import math
+
+from django.db.models import F
+
+LOCATION_ROAD_TOWN = 4
+
+LOCATION_KILLING_FIELDS = 3
+
+LOCATION_ROAD_KILLING_FIELDS = 2
+
+LOCATION_TOWN = 1
 LUCK_MULTIPLIER = 0.1
 
 BASE_SPEED_OF_TRAVEL = 1
@@ -41,6 +53,13 @@ class Hero(models.Model):
     charisma = models.IntegerField()
     gold = models.IntegerField()
     last_action = models.DateTimeField(auto_created=True)
+    LOCATION = (
+        (LOCATION_TOWN, 'Town'),
+        (LOCATION_ROAD_KILLING_FIELDS, 'In road to Killing fields'),
+        (LOCATION_KILLING_FIELDS, 'Killing fields'),
+        (LOCATION_ROAD_TOWN, 'In road to Town'),
+    )
+    location = models.IntegerField(choices=LOCATION, default=1)
 
     @property
     def capacity(self):
@@ -58,6 +77,24 @@ class Hero(models.Model):
     def merchant_discount(self):
         return math.log2(self.charisma)
 
+    @property
+    def level(self):
+        return math.ceil(math.log(max(self.experience, 1), 8))
+
+    def add_random_attribute(self):
+        option = choice(['strength', 'agility', 'vitality', 'wisdom', 'charisma'])
+        if option == 'strength':
+            self.strength = F('strength') + 1
+        if option == 'agility':
+            self.agility = F('agility') + 1
+        if option == 'vitality':
+            self.vitality = F('vitality') + 1
+        if option == 'wisdom':
+            self.wisdom = F('wisdom') + 1
+        if option == 'charisma':
+            self.charisma = F('charisma') + 1
+        self.save()
+        return option
 
 class Item(models.Model):
     QUALITY = (
@@ -69,8 +106,14 @@ class Item(models.Model):
 
     name = models.CharField(max_length=255)
     quality = models.IntegerField(choices=QUALITY)
-    owner = models.ForeignKey(Hero, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Hero, on_delete=models.CASCADE, related_name='items')
 
+    @property
+    def price(self):
+        return self.owner.level * self.quality
+
+    def __str__(self):
+        return f'<{self.get_quality_display()}> {self.name}'
 
 class Equipment(models.Model):
     PREFIXES = (
@@ -92,7 +135,7 @@ class Equipment(models.Model):
     )
     suffix = models.CharField(max_length=255)
     modifier = models.IntegerField()
-    owner = models.ForeignKey(Hero, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Hero, on_delete=models.CASCADE, related_name='equipments')
     SLOTS = (
         (1, 'Helmet'),
         (2, 'Shoulders'),
@@ -108,4 +151,11 @@ class Equipment(models.Model):
 
     @property
     def price(self):
-        return self.prefix*self.suffix*self.slots
+        return self.prefix * self.suffix * self.slots
+
+    @property
+    def price_next(self):
+        return self.prefix * self.suffix * self.slots * 4
+
+    def __str__(self):
+        return f'{self.get_prefix_display()} {self.get_slot_display()} {self.get_prefix_display()} {self.modifier}'
