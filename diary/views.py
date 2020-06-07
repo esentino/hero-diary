@@ -95,7 +95,7 @@ class Diary:
     def can_buy_equipment(self):
         price_for_slot_upgrade = self.get_price_for_upgrade()
 
-        for key, value in price_for_slot_upgrade:
+        for key, value in price_for_slot_upgrade.items():
             if value <= self._hero.gold:
                 return True
         return False
@@ -119,7 +119,7 @@ class Diary:
             self._hero.save()
             return
         if action.action_type == ActionType.BUY_EQUIPMENT:
-            for slot, value in self.get_price_for_upgrade():
+            for slot, value in self.get_price_for_upgrade().items():
                 if value <= self._hero.gold:
                     equipment = self.buy_equipment(slot, value)
                     self._hero.last_action += timedelta(seconds=action.time)
