@@ -94,7 +94,7 @@ class Diary:
 
     def can_buy_equipment(self):
         price_for_slot_upgrade = self.get_price_for_upgrade()
-
+        self._hero.refresh_from_db()
         for key, value in price_for_slot_upgrade.items():
             if value <= self._hero.gold:
                 return True
