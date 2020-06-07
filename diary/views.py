@@ -117,7 +117,7 @@ class Diary:
             item = self._hero.items.first()
             self._hero.gold += item.price
             self._hero.last_action += timedelta(seconds=action.time)
-            self.messages.append(f'{self._hero.last_action} - sell item {item} - price: {item.price}')
+            self.messages.append(f'{self._hero.last_action} - sell item {item} - price: {item.price} - gold {self._hero.gold}')
             item.delete()
             self._hero.save()
             return
@@ -167,7 +167,7 @@ class Diary:
             return
 
     def buy_equipment(self, slot, value):
-        self._hero.gold -= - value
+        self._hero.gold -= value
         equipment = self._hero.equipments.filter(slot=slot).first()
         if equipment:
             if equipment.prefix > equipment.suffix:
