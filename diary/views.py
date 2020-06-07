@@ -173,7 +173,7 @@ class Diary:
                 equipment.prefix = F('prefix') * 4
             equipment.save()
         else:
-            equipment = Equipment.objects.create(prefix=1, suffix=1, slot=slot, owner=self._hero)
+            equipment = Equipment.objects.create(prefix=1, suffix=1, slot=slot, owner=self._hero, modifier=0)
         self._hero.save()
         return equipment
 
