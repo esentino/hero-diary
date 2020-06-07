@@ -33,7 +33,7 @@
                     Wis: {{ hero.wisdom }}
                     Cha: {{ hero.charisma }}
                 </p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <a href="{% url 'hero' hero.id %}" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
 
