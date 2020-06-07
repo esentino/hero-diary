@@ -137,7 +137,7 @@ class Equipment(models.Model):
         (256, 'of God'),
         (1024, 'of Hamster'),
     )
-    suffix = models.CharField(max_length=255)
+    suffix = models.IntegerField(choices=SUFFIX, default=1)
     modifier = models.IntegerField()
     owner = models.ForeignKey(Hero, on_delete=models.CASCADE, related_name='equipments')
     SLOTS = (
