@@ -33,6 +33,12 @@
                     Cha: {{ hero.charisma }}
                     Location: {{ hero.get_location_display }}
                 </p>
+                <p>
+                    Equipment:
+                    {% for equipment in hero.equipments.all %}
+                      {{ equipment }} |
+                    {% endfor%}
+                </p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
