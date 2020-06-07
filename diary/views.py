@@ -165,7 +165,7 @@ class Diary:
 
     def buy_equipment(self, slot, value):
         self._hero.gold = F('gold') - value
-        equipment = self._hero.equipments.filter(slot=slot)
+        equipment = self._hero.equipments.filter(slot=slot).first()
         if equipment:
             if equipment.prefix > equipment.suffix:
                 equipment.suffix = F('suffix') * 4
