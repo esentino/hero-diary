@@ -79,6 +79,7 @@ class Hero(models.Model):
 
     @property
     def level(self):
+        self.refresh_from_db()
         current_exp = max(self.experience, 1)
         logaritmic_level = math.log(current_exp, 8)
         return math.ceil(logaritmic_level)
