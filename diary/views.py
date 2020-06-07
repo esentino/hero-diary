@@ -189,7 +189,6 @@ class Diary:
             quality = 4
         else:
             quality = 1
-        quality = choice([1, 4, 16, 256])
         name = choice(LIST_OF_ITEMS)
         return Item.objects.create(quality=quality, name=name)
 
@@ -199,4 +198,4 @@ class CheckHero(View):
         hero = get_object_or_404(pk=hero_id)
         diary = Diary(hero)
         diary.process_story()
-        return render(request, 'hero_page.html', context={'hero': hero, 'diary':diary})
+        return render(request, 'hero_page.html', context={'hero': hero, 'diary': diary})
