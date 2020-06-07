@@ -1,4 +1,12 @@
 from django.db import models
+import math
+LUCK_MULTIPLIER = 0.1
+
+BASE_SPEED_OF_TRAVEL = 1
+
+SPEED_OF_TRAVEL_MULTIPLIER = 0.1
+
+BASE_CAPACITY = 10
 
 LIST_OF_ITEMS = [
     'Soap',
@@ -32,6 +40,23 @@ class Hero(models.Model):
     wisdom = models.IntegerField()
     charisma = models.IntegerField()
     gold = models.IntegerField()
+    last_action = models.DateTimeField(auto_created=True)
+
+    @property
+    def capacity(self):
+        return self.strength + BASE_CAPACITY
+
+    @property
+    def speed_of_travel(self):
+        return BASE_SPEED_OF_TRAVEL + self.agility * SPEED_OF_TRAVEL_MULTIPLIER
+
+    @property
+    def luck(self):
+        return self.wisdom * LUCK_MULTIPLIER
+
+    @property
+    def merchant_discount(self):
+        return math.log2(self.charisma)
 
 
 class Item(models.Model):
@@ -80,3 +105,7 @@ class Equipment(models.Model):
         (9, 'Cape'),
     )
     slot = models.IntegerField(choices=SLOTS)
+
+    @property
+    def price(self):
+        return self.prefix*self.suffix*self.slots
