@@ -83,7 +83,6 @@ class Diary:
 
     def predict_action(self):
         if self._hero.location == LOCATION_TOWN:
-            self._hero.refresh_from_db()
             if self._hero.items.count() > 0:
                 return Action(ActionType.SELL_ITEM)
             if self.can_buy_equipment():
@@ -99,7 +98,6 @@ class Diary:
 
     def can_buy_equipment(self):
         price_for_slot_upgrade = self.get_price_for_upgrade()
-        self._hero.refresh_from_db()
         for key, value in price_for_slot_upgrade.items():
             if value <= self._hero.gold:
                 return True
