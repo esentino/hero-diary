@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
+import logging
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -126,9 +126,15 @@ DATABASES['default']['ENGINE'] = 'django_postgrespool2'
 
 DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
 
+logger = logging.getLogger(__name__)
+
 DATABASE_POOL_ARGS = {
     'max_overflow': 1,
     'pool_size': 1,
     'recycle': 2,
     'timeout': 2,
 }
+
+logger.info(f'{DATABASE_POOL_ARGS}')
+logger.info(f'{DATABASE_POOL_CLASS}')
+logger.info(f'{DATABASES}')
