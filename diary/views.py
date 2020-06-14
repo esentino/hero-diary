@@ -76,6 +76,7 @@ class Diary:
             action = self.predict_action()
             self.make_action(action)
             counter += 1
+        self._hero.save()  # Save hero only one
 
     def can_do_next_action(self):
         action = self.predict_action()
@@ -120,7 +121,6 @@ class Diary:
             self.messages.append(
                 f'{self._hero.last_action} - sell item {item} - price: {item.price} - gold {self._hero.gold}')
             item.delete()
-            self._hero.save()
             return
         if action.action_type == ActionType.BUY_EQUIPMENT:
             for slot, value in self.get_price_for_upgrade().items():
@@ -128,19 +128,16 @@ class Diary:
                     equipment = self.buy_equipment(slot, value)
                     self._hero.last_action += timedelta(seconds=action.time)
                     self.messages.append(f'{self._hero.last_action} - buy equipment {equipment}')
-                    self._hero.save()
                     return
         if action.action_type == ActionType.TRAVEL_TO_KILLING_FIELD:
             self._hero.location = LOCATION_ROAD_KILLING_FIELDS
             self._hero.last_action += timedelta(seconds=action.time)
             self.messages.append(f'{self._hero.last_action} - travel to  KILLING_FIEL')
-            self._hero.save()
             return
         if action.action_type == ActionType.KILLING_FIELD:
             self._hero.location = LOCATION_KILLING_FIELDS
             self._hero.last_action += timedelta(seconds=action.time)
             self.messages.append(f'{self._hero.last_action} - in  KILLING_FIEL')
-            self._hero.save()
             return
         if action.action_type == ActionType.KILL_MONSTER:
             self._hero.experience += + randint(3, 5)
@@ -152,19 +149,16 @@ class Diary:
                 self.messages.append(f'{self._hero.last_action} - get attribute {attribute}')
             item = self.generate_item()
             self.messages.append(f'{self._hero.last_action} - get {item}')
-            self._hero.save()
             return
         if action.action_type == ActionType.TRAVEL_TO_TOWN:
             self._hero.location = LOCATION_ROAD_TOWN
             self._hero.last_action += timedelta(seconds=action.time)
             self.messages.append(f'{self._hero.last_action} - travel to  Town')
-            self._hero.save()
             return
         if action.action_type == ActionType.TOWN:
             self._hero.location = LOCATION_TOWN
             self._hero.last_action += timedelta(seconds=action.time)
             self.messages.append(f'{self._hero.last_action} - in  Town')
-            self._hero.save()
             return
 
     def buy_equipment(self, slot, value):
@@ -178,7 +172,6 @@ class Diary:
             equipment.save()
         else:
             equipment = Equipment.objects.create(prefix=1, suffix=1, slot=slot, owner=self._hero, modifier=0)
-        self._hero.save()
         return equipment
 
     def generate_item(self):

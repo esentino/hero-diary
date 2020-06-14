@@ -86,8 +86,6 @@ class Hero(models.Model):
             self.wisdom += + 1
         if option == 'charisma':
             self.charisma += + 1
-        self.save()
-        self.refresh_from_db()
         return option
 
 class Item(models.Model):
