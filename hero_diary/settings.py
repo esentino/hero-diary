@@ -129,5 +129,6 @@ DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
 DATABASE_POOL_ARGS = {
     'max_overflow': 1,
     'pool_size': 1,
-    'recycle': 2
+    'recycle': 2,
+    'timeout': 2,
 }
