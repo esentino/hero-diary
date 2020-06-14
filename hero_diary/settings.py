@@ -127,5 +127,5 @@ DATABASES['default']['ENGINE'] = 'django_postgrespool2'
 DATABASE_POOL_ARGS = {
     'max_overflow': 1,
     'pool_size': 1,
-    'recycle': 1
+    'recycle': 2
 }
