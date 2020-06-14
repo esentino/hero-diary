@@ -123,3 +123,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 django_heroku.settings(locals())
 DATABASES['default']['ENGINE'] = 'django_postgrespool2'
+DATABASE_POOL_ARGS = {
+    'max_overflow': 10,
+    'pool_size': 10,
+    'recycle': 300
+}
