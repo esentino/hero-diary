@@ -125,7 +125,7 @@ django_heroku.settings(locals())
 DATABASES['default']['ENGINE'] = 'django_postgrespool2'
 
 DATABASE_POOL_ARGS = {
-    'max_overflow': 10,
-    'pool_size': 10,
-    'recycle': 300
+    'max_overflow': 1,
+    'pool_size': 1,
+    'recycle': 1
 }
