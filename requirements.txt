@@ -2,4 +2,3 @@ django
 uvicorn
 django-heroku
 faker
-django-postgrespool2

@@ -121,20 +121,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+CONN_MAX_AGE = 0
 django_heroku.settings(locals())
-DATABASES['default']['ENGINE'] = 'django_postgrespool2'
 
-DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
-
-logger = logging.getLogger(__name__)
-
-DATABASE_POOL_ARGS = {
-    'max_overflow': 1,
-    'pool_size': 1,
-    'recycle': 2,
-    'timeout': 2,
-}
-
-logger.info(f'{DATABASE_POOL_ARGS}')
-logger.info(f'{DATABASE_POOL_CLASS}')
-logger.info(f'{DATABASES}')
