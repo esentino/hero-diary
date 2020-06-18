@@ -8,42 +8,71 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Hero',
+            name="Hero",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('experience', models.IntegerField(default=0)),
-                ('strength', models.IntegerField()),
-                ('agility', models.IntegerField()),
-                ('vitality', models.IntegerField()),
-                ('wisdom', models.IntegerField()),
-                ('charisma', models.IntegerField()),
-                ('gold', models.IntegerField()),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=255)),
+                ("experience", models.IntegerField(default=0)),
+                ("strength", models.IntegerField()),
+                ("agility", models.IntegerField()),
+                ("vitality", models.IntegerField()),
+                ("wisdom", models.IntegerField()),
+                ("charisma", models.IntegerField()),
+                ("gold", models.IntegerField()),
             ],
         ),
         migrations.CreateModel(
-            name='Item',
+            name="Item",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('quality', models.IntegerField(choices=[(1, 'normal'), (4, 'rare'), (16, 'unique'), (64, 'legendary')])),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='diary.Hero')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=255)),
+                (
+                    "quality",
+                    models.IntegerField(choices=[(1, "normal"), (4, "rare"), (16, "unique"), (64, "legendary")]),
+                ),
+                ("owner", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="diary.Hero")),
             ],
         ),
         migrations.CreateModel(
-            name='Equipment',
+            name="Equipment",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('prefix', models.IntegerField(choices=[(1, 'Awful'), (4, 'Poor'), (16, 'Normal'), (64, 'Good'), (256, 'Excellent'), (1024, 'Legendary')])),
-                ('suffix', models.CharField(max_length=255)),
-                ('modifier', models.IntegerField()),
-                ('slot', models.IntegerField(choices=[(1, 'Helmet'), (2, 'Shoulders'), (3, 'Armor'), (4, 'Gloves'), (5, 'Legs'), (6, 'Shoes'), (7, 'Sword'), (8, 'Shield'), (9, 'Cape')])),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='diary.Hero')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "prefix",
+                    models.IntegerField(
+                        choices=[
+                            (1, "Awful"),
+                            (4, "Poor"),
+                            (16, "Normal"),
+                            (64, "Good"),
+                            (256, "Excellent"),
+                            (1024, "Legendary"),
+                        ]
+                    ),
+                ),
+                ("suffix", models.CharField(max_length=255)),
+                ("modifier", models.IntegerField()),
+                (
+                    "slot",
+                    models.IntegerField(
+                        choices=[
+                            (1, "Helmet"),
+                            (2, "Shoulders"),
+                            (3, "Armor"),
+                            (4, "Gloves"),
+                            (5, "Legs"),
+                            (6, "Shoes"),
+                            (7, "Sword"),
+                            (8, "Shield"),
+                            (9, "Cape"),
+                        ]
+                    ),
+                ),
+                ("owner", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="diary.Hero")),
             ],
         ),
     ]

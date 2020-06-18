@@ -6,16 +6,25 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from faker import Faker
 
-from diary.models import Hero, LOCATION_TOWN, LOCATION_ROAD_KILLING_FIELDS, LOCATION_KILLING_FIELDS, LOCATION_ROAD_TOWN, \
-    Equipment, LIST_OF_MONSTER, Item, LIST_OF_ITEMS
+from diary.models import (
+    Hero,
+    LOCATION_TOWN,
+    LOCATION_ROAD_KILLING_FIELDS,
+    LOCATION_KILLING_FIELDS,
+    LOCATION_ROAD_TOWN,
+    Equipment,
+    LIST_OF_MONSTER,
+    Item,
+    LIST_OF_ITEMS,
+)
 
-fake = Faker(['pl_PL', 'sv_SE', 'hi_IN'])
+fake = Faker(["pl_PL", "sv_SE", "hi_IN"])
 
 
 class StartView(View):
     def get(self, request):
         heroes = Hero.objects.all()
-        return render(request, 'index.html', context={'heroes': heroes})
+        return render(request, "index.html", context={"heroes": heroes})
 
 
 class CreateHero(View):
@@ -28,9 +37,9 @@ class CreateHero(View):
             wisdom=randint(3, 18),
             charisma=randint(3, 18),
             gold=0,
-            last_action=datetime.now()
+            last_action=datetime.now(),
         )
-        return redirect('index')
+        return redirect("index")
 
 
 class ActionType(Enum):
@@ -106,60 +115,86 @@ class Diary:
 
     def get_price_for_upgrade(self):
         equipments = self._hero.equipments.all()
-        price_for_slot_upgrade = {
-            k: 1 for k, _ in Equipment.SLOTS
-        }
+        price_for_slot_upgrade = {k: 1 for k, _ in Equipment.SLOTS}
         for equipment in equipments:
             price_for_slot_upgrade[equipment.slot] = equipment.price_next
         return price_for_slot_upgrade
 
     def make_action(self, action: Action):
-        if action.action_type == ActionType.SELL_ITEM:
-            item = self._hero.items.first()
-            self._hero.gold += item.price
-            self._hero.last_action += timedelta(seconds=action.time)
-            self.messages.append(
-                f'{self._hero.last_action} - sell item {item} - price: {item.price} - gold {self._hero.gold}')
-            item.delete()
-            return
-        if action.action_type == ActionType.BUY_EQUIPMENT:
-            for slot, value in self.get_price_for_upgrade().items():
-                if value <= self._hero.gold:
-                    equipment = self.buy_equipment(slot, value)
-                    self._hero.last_action += timedelta(seconds=action.time)
-                    self.messages.append(f'{self._hero.last_action} - buy equipment {equipment}')
-                    return
-        if action.action_type == ActionType.TRAVEL_TO_KILLING_FIELD:
-            self._hero.location = LOCATION_ROAD_KILLING_FIELDS
-            self._hero.last_action += timedelta(seconds=action.time)
-            self.messages.append(f'{self._hero.last_action} - travel to  KILLING_FIEL')
-            return
-        if action.action_type == ActionType.KILLING_FIELD:
-            self._hero.location = LOCATION_KILLING_FIELDS
-            self._hero.last_action += timedelta(seconds=action.time)
-            self.messages.append(f'{self._hero.last_action} - in  KILLING_FIEL')
-            return
-        if action.action_type == ActionType.KILL_MONSTER:
-            self._hero.experience += + randint(3, 5)
-            self._hero.last_action += timedelta(seconds=action.time)
-            monster = choice(LIST_OF_MONSTER)
-            self.messages.append(f'{self._hero.last_action} - kill {monster}')
-            if randint(1, 100) > 99:
-                attribute = self._hero.add_random_attribute()
-                self.messages.append(f'{self._hero.last_action} - get attribute {attribute}')
-            item = self.generate_item()
-            self.messages.append(f'{self._hero.last_action} - get {item}')
-            return
-        if action.action_type == ActionType.TRAVEL_TO_TOWN:
-            self._hero.location = LOCATION_ROAD_TOWN
-            self._hero.last_action += timedelta(seconds=action.time)
-            self.messages.append(f'{self._hero.last_action} - travel to  Town')
-            return
-        if action.action_type == ActionType.TOWN:
-            self._hero.location = LOCATION_TOWN
-            self._hero.last_action += timedelta(seconds=action.time)
-            self.messages.append(f'{self._hero.last_action} - in  Town')
-            return
+        actions = {
+            ActionType.SELL_ITEM: self.sell_item,
+            ActionType.BUY_EQUIPMENT: self.buy_equipments,
+            ActionType.TRAVEL_TO_KILLING_FIELD: self.travel_to_killing_field,
+            ActionType.KILLING_FIELD: self.killing_field,
+            ActionType.KILL_MONSTER: self.action_kill_monster,
+            ActionType.TRAVEL_TO_TOWN: self.action_travel_to_town,
+            ActionType.TOWN: self.action_in_town,
+        }
+
+        action_method = actions.get(action.action_type)
+        action_method(action)
+
+        # if action.action_type == ActionType.SELL_ITEM:
+        #     self.sell_item(action)
+        # elif action.action_type == ActionType.BUY_EQUIPMENT:
+        #     self.buy_equipments(action)
+        # elif action.action_type == ActionType.TRAVEL_TO_KILLING_FIELD:
+        #     self.travel_to_killing_field(action)
+        # elif action.action_type == ActionType.KILLING_FIELD:
+        #     self.killing_field(action)
+        # elif action.action_type == ActionType.KILL_MONSTER:
+        #     self.action_kill_monster(action)
+        # elif action.action_type == ActionType.TRAVEL_TO_TOWN:
+        #     self.action_travel_to_town(action)
+        # elif action.action_type == ActionType.TOWN:
+        #     self.action_in_town(action)
+
+    def buy_equipments(self, action):
+        for slot, value in self.get_price_for_upgrade().items():
+            if value <= self._hero.gold:
+                equipment = self.buy_equipment(slot, value)
+                self._hero.last_action += timedelta(seconds=action.time)
+                self.messages.append(f"{self._hero.last_action} - buy equipment {equipment}")
+
+    def action_in_town(self, action):
+        self._hero.location = LOCATION_TOWN
+        self._hero.last_action += timedelta(seconds=action.time)
+        self.messages.append(f"{self._hero.last_action} - in  Town")
+
+    def action_travel_to_town(self, action):
+        self._hero.location = LOCATION_ROAD_TOWN
+        self._hero.last_action += timedelta(seconds=action.time)
+        self.messages.append(f"{self._hero.last_action} - travel to  Town")
+
+    def action_kill_monster(self, action):
+        self._hero.experience += +randint(3, 5)
+        self._hero.last_action += timedelta(seconds=action.time)
+        monster = choice(LIST_OF_MONSTER)
+        self.messages.append(f"{self._hero.last_action} - kill {monster}")
+        if randint(1, 100) > 99:
+            attribute = self._hero.add_random_attribute()
+            self.messages.append(f"{self._hero.last_action} - get attribute {attribute}")
+        item = self.generate_item()
+        self.messages.append(f"{self._hero.last_action} - get {item}")
+
+    def killing_field(self, action):
+        self._hero.location = LOCATION_KILLING_FIELDS
+        self._hero.last_action += timedelta(seconds=action.time)
+        self.messages.append(f"{self._hero.last_action} - in  KILLING_FIEL")
+
+    def travel_to_killing_field(self, action):
+        self._hero.location = LOCATION_ROAD_KILLING_FIELDS
+        self._hero.last_action += timedelta(seconds=action.time)
+        self.messages.append(f"{self._hero.last_action} - travel to  KILLING_FIEL")
+
+    def sell_item(self, action):
+        item = self._hero.items.first()
+        self._hero.gold += item.price
+        self._hero.last_action += timedelta(seconds=action.time)
+        self.messages.append(
+            f"{self._hero.last_action} - sell item {item} - price: {item.price} - gold {self._hero.gold}"
+        )
+        item.delete()
 
     def buy_equipment(self, slot, value):
         self._hero.gold -= value
@@ -193,4 +228,4 @@ class CheckHero(View):
         hero = get_object_or_404(Hero, pk=hero_id)
         diary = Diary(hero)
         diary.process_story()
-        return render(request, 'hero_page.html', context={'hero': hero, 'diary': diary})
+        return render(request, "hero_page.html", context={"hero": hero, "diary": diary})
