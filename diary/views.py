@@ -73,7 +73,7 @@ class Action:
 
 
 class Diary:
-    MAX_ACTION_COUNT = 15
+    MAX_ACTION_COUNT = 100
 
     def __init__(self, hero: Hero):
         self._hero = hero
