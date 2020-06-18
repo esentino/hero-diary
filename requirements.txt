@@ -1,4 +1,4 @@
 django
-uvicorn
+gunicorn
 django-heroku
 faker
