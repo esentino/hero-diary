@@ -134,21 +134,6 @@ class Diary:
         action_method = actions.get(action.action_type)
         action_method(action)
 
-        # if action.action_type == ActionType.SELL_ITEM:
-        #     self.sell_item(action)
-        # elif action.action_type == ActionType.BUY_EQUIPMENT:
-        #     self.buy_equipments(action)
-        # elif action.action_type == ActionType.TRAVEL_TO_KILLING_FIELD:
-        #     self.travel_to_killing_field(action)
-        # elif action.action_type == ActionType.KILLING_FIELD:
-        #     self.killing_field(action)
-        # elif action.action_type == ActionType.KILL_MONSTER:
-        #     self.action_kill_monster(action)
-        # elif action.action_type == ActionType.TRAVEL_TO_TOWN:
-        #     self.action_travel_to_town(action)
-        # elif action.action_type == ActionType.TOWN:
-        #     self.action_in_town(action)
-
     def buy_equipments(self, action):
         for slot, value in self.get_price_for_upgrade().items():
             if value <= self._hero.gold:
