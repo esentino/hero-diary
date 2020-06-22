@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta, timezone
 from enum import Enum, auto
 from random import randint, choice
+from types import FunctionType
+from typing import Dict
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
@@ -93,18 +95,24 @@ class Diary:
 
     def predict_action(self):
         if self._hero.location == LOCATION_TOWN:
-            if self._hero.items.count() > 0:
-                return Action(ActionType.SELL_ITEM)
-            if self.can_buy_equipment():
-                return Action(ActionType.BUY_EQUIPMENT)
-            return Action(ActionType.TRAVEL_TO_KILLING_FIELD)
+            return self.predict_action_in_town()
         if self._hero.location == LOCATION_ROAD_KILLING_FIELDS:
             return Action(ActionType.KILLING_FIELD)
         if self._hero.location == LOCATION_KILLING_FIELDS:
-            if self._hero.items.count() < self._hero.capacity:
-                return Action(ActionType.KILL_MONSTER)
-            return Action(ActionType.TRAVEL_TO_TOWN)
+            return self.predict_action_in_killing_fields()
         return Action(ActionType.TOWN)
+
+    def predict_action_in_killing_fields(self):
+        if self._hero.items.count() < self._hero.capacity:
+            return Action(ActionType.KILL_MONSTER)
+        return Action(ActionType.TRAVEL_TO_TOWN)
+
+    def predict_action_in_town(self):
+        if self._hero.items.count() > 0:
+            return Action(ActionType.SELL_ITEM)
+        if self.can_buy_equipment():
+            return Action(ActionType.BUY_EQUIPMENT)
+        return Action(ActionType.TRAVEL_TO_KILLING_FIELD)
 
     def can_buy_equipment(self):
         price_for_slot_upgrade = self.get_price_for_upgrade()
@@ -121,7 +129,7 @@ class Diary:
         return price_for_slot_upgrade
 
     def make_action(self, action: Action):
-        actions = {
+        actions: Dict[ActionType, FunctionType] = {
             ActionType.SELL_ITEM: self.sell_item,
             ActionType.BUY_EQUIPMENT: self.buy_equipments,
             ActionType.TRAVEL_TO_KILLING_FIELD: self.travel_to_killing_field,
@@ -132,7 +140,8 @@ class Diary:
         }
 
         action_method = actions.get(action.action_type)
-        action_method(action)
+        if action_method:
+            action_method(action)
 
     def buy_equipments(self, action):
         for slot, value in self.get_price_for_upgrade().items():
