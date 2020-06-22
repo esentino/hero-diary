@@ -3,35 +3,7 @@ from random import choice
 
 from django.db import models
 
-BASE_CAPACITY = 10
-BASE_SPEED_OF_TRAVEL = 1
-LOCATION_ROAD_TOWN = 4
-LOCATION_KILLING_FIELDS = 3
-LOCATION_ROAD_KILLING_FIELDS = 2
-LOCATION_TOWN = 1
-LUCK_MULTIPLIER = 0.1
-SPEED_OF_TRAVEL_MULTIPLIER = 0.1
-
-LIST_OF_ITEMS = [
-    "Soap",
-    "Branch",
-    "Rock",
-    "Rope",
-    "Glasses",
-    "Skin",
-    "Head & Shoulders",
-    "Bat",
-]
-
-LIST_OF_MONSTER = [
-    "Dragon",
-    "ButterFly",
-    "Village Idiot",
-    "Rabbit",
-    "Wolf",
-    "Big Bad Wolf",
-    "Small Bad Wolf",
-]
+from diary import consts
 
 
 class Hero(models.Model):
@@ -45,24 +17,24 @@ class Hero(models.Model):
     gold = models.IntegerField()
     last_action = models.DateTimeField(auto_created=True)
     LOCATION = (
-        (LOCATION_TOWN, "Town"),
-        (LOCATION_ROAD_KILLING_FIELDS, "In road to Killing fields"),
-        (LOCATION_KILLING_FIELDS, "Killing fields"),
-        (LOCATION_ROAD_TOWN, "In road to Town"),
+        (consts.LOCATION_TOWN, "Town"),
+        (consts.LOCATION_ROAD_KILLING_FIELDS, "In road to Killing fields"),
+        (consts.LOCATION_KILLING_FIELDS, "Killing fields"),
+        (consts.LOCATION_ROAD_TOWN, "In road to Town"),
     )
     location = models.IntegerField(choices=LOCATION, default=1)
 
     @property
     def capacity(self):
-        return self.strength + BASE_CAPACITY
+        return self.strength + consts.BASE_CAPACITY
 
     @property
     def speed_of_travel(self):
-        return BASE_SPEED_OF_TRAVEL + self.agility * SPEED_OF_TRAVEL_MULTIPLIER
+        return consts.BASE_SPEED_OF_TRAVEL + self.agility * consts.SPEED_OF_TRAVEL_MULTIPLIER
 
     @property
     def luck(self):
-        return self.wisdom * LUCK_MULTIPLIER
+        return self.wisdom * consts.LUCK_MULTIPLIER
 
     @property
     def merchant_discount(self):

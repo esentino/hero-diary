@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from diary.views import StartView, CreateHero, CheckHero
+from diary.views import CheckHero, CreateHero, StartView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
