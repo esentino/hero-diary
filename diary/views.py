@@ -14,12 +14,13 @@ fake = Faker(["pl_PL", "sv_SE", "hi_IN"])
 from rq import Queue
 from worker import conn
 
-q = Queue(connection=conn)
+
 
 class StartView(View):
     def get(self, request):
         heroes = models.Hero.objects.all()
         from utils import count_words_at_url
+        q = Queue(connection=conn)
         result = q.enqueue(count_words_at_url, 'http://heroku.com')
         return render(request, "index.html", context={"heroes": heroes})
 
